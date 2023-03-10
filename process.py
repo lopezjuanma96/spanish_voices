@@ -12,14 +12,14 @@ def prop_path(pth):
     """
     return os.path.join(SCRIPT_DIR, pth)
 
-audio_pth = prop_path('combine/audio')
+audio_pth_rel = 'spanish_voices/audio'
 try:
-    os.makedirs(audio_pth)
+    os.makedirs(prop_path(audio_pth_rel))
 except OSError:
     pass
 
 new_transcript = []
-trnsc_pth = prop_path('combine')
+trnsc_pth = prop_path('spanish_voices')
 try:
     os.makedirs(trnsc_pth)
 except OSError:
@@ -49,9 +49,10 @@ end = (len(sort)//2)+amt//2 + 1
 
 for i in range(start, end):
     src_file = prop_path(f'sources/css10/{sort[i][0]}')
-    dst_file = prop_path(f'{audio_pth}/{os.path.split(src_file)[-1]}')
+    dst_file_rel = f'{audio_pth_rel}/{os.path.split(src_file)[-1]}'
+    dst_file = prop_path(dst_file_rel)
     shutil.copyfile(src_file, dst_file)
-    new_transcript.append(f'{dst_file}|{id}|[ES]{sort[i][1]}[ES]')
+    new_transcript.append(f'{dst_file_rel}|{id}|[ES]{sort[i][1]}[ES]')
 
 #120h
 amt = 700 #how many values to extract from this, can be None if ratio is not None
@@ -82,15 +83,16 @@ end = (len(sort)//2)+amt//2 + 1
 
 for i in range(start, end):
     src_file = prop_path(f'sources/120h/{sort[i][0]}')
-    dst_file = prop_path(f'{audio_pth}/{os.path.split(src_file)[-1]}')
+    dst_file_rel = f'{audio_pth_rel}/{os.path.split(src_file)[-1]}'
+    dst_file = prop_path(dst_file_rel)
     shutil.copyfile(src_file, dst_file)
-    new_transcript.append(f'{dst_file}|{id}|[ES]{sort[i][1]}[ES]')
+    new_transcript.append(f'{dst_file_rel}|{id}|[ES]{sort[i][1]}[ES]')
 
 #transcript
 with open(f'{trnsc_pth}/transcript.txt', 'w') as f:
     f.write('\n'.join(new_transcript))
 
-with ZipFile(prop_path('combine.zip'), 'w') as myzip:
-    myzip.write(prop_path('combine/transcript.txt'), 'transcript.txt')
-    for audio_f in os.listdir(prop_path('combine/audio')):
-        myzip.write(prop_path(f'combine/audio/{audio_f}'), f'audio/{audio_f}')
+with ZipFile(prop_path('spanish_voices.zip'), 'w') as myzip:
+    myzip.write(prop_path('spanish_voices/transcript.txt'), 'spanish_voices/transcript.txt')
+    for audio_f in os.listdir(prop_path('spanish_voices/audio')):
+        myzip.write(prop_path(f'spanish_voices/audio/{audio_f}'), f'spanish_voices/audio/{audio_f}')
