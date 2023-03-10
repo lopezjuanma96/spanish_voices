@@ -90,7 +90,7 @@ for i in range(start, end):
 
 #transcript
 with open(f'{trnsc_pth}/transcript.txt', 'w') as f:
-    f.write('\n'.join(new_transcript))
+    f.write('\n'.join(new_transcript) + '\n') #transcript requires ending in a newline
 
 with ZipFile(prop_path('spanish_voices.zip'), 'w') as myzip:
     myzip.write(prop_path('spanish_voices/transcript.txt'), 'spanish_voices/transcript.txt')
