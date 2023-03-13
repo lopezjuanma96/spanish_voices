@@ -19,6 +19,7 @@ except OSError:
     pass
 
 new_transcript = []
+new_transcript_coqui = []
 trnsc_pth = prop_path('spanish_voices')
 try:
     os.makedirs(trnsc_pth)
@@ -53,6 +54,7 @@ for i in range(start, end):
     dst_file = prop_path(dst_file_rel)
     shutil.copyfile(src_file, dst_file)
     new_transcript.append(f'{dst_file_rel}|{id}|[ES]{sort[i][1]}[ES]')
+    new_transcript_coqui.append(f'{dst_file_rel}|{sort[i][1]}')
 
 #120h
 amt = 700 #how many values to extract from this, can be None if ratio is not None
@@ -87,12 +89,16 @@ for i in range(start, end):
     dst_file = prop_path(dst_file_rel)
     shutil.copyfile(src_file, dst_file)
     new_transcript.append(f'{dst_file_rel}|{id}|[ES]{sort[i][1]}[ES]')
+    new_transcript_coqui.append(f'{dst_file_rel}|{sort[i][1]}')
 
 #transcript
 with open(f'{trnsc_pth}/transcript.txt', 'w') as f:
     f.write('\n'.join(new_transcript) + '\n') #transcript requires ending in a newline
+with open(f'{trnsc_pth}/transcript_coqui.txt', 'w') as f:
+    f.write('\n'.join(new_transcript_coqui) + '\n') #transcript requires ending in a newline
 
 with ZipFile(prop_path('spanish_voices.zip'), 'w') as myzip:
     myzip.write(prop_path('spanish_voices/transcript.txt'), 'spanish_voices/transcript.txt')
+    myzip.write(prop_path('spanish_voices/transcript_coqui.txt'), 'spanish_voices/transcript_coqui.txt')
     for audio_f in os.listdir(prop_path('spanish_voices/audio')):
         myzip.write(prop_path(f'spanish_voices/audio/{audio_f}'), f'spanish_voices/audio/{audio_f}')
