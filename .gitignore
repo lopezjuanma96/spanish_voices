@@ -1,5 +1,11 @@
 combine*
-sources*
+sources/*
+!sources/120h
+sources/120h/*
+!sources/120h/download.sh
+!sources/css10
+sources/css10/*
+!sources/css10/download.sh
 combine.zip
 spanish_voices*
 spanish_voices.zip
