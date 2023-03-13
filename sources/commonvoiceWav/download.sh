@@ -1,0 +1,1 @@
+# after downloading ../commonvoice run ../../commonvoiceToWav.py

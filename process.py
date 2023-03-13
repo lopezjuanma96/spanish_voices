@@ -45,8 +45,8 @@ elif ratio is not None:
 else:
     amt = int(amt)
 
-start = (len(sort)//2)-amt//2
-end = (len(sort)//2)+amt//2 + 1
+start = max(0, (len(sort)//2)-amt//2)
+end = min(len(sort), (len(sort)//2)+amt//2 + 1)
 
 for i in range(start, end):
     src_file = prop_path(f'sources/css10/{sort[i][0]}')
@@ -80,8 +80,8 @@ elif ratio is not None:
 else:
     amt = int(amt)
 
-start = (len(sort)//2)-amt//2
-end = (len(sort)//2)+amt//2 + 1
+start = max(0, (len(sort)//2)-amt//2)
+end = min(len(sort), (len(sort)//2)+amt//2 + 1)
 
 for i in range(start, end):
     src_file = prop_path(f'sources/120h/{sort[i][0]}')
@@ -90,6 +90,40 @@ for i in range(start, end):
     shutil.copyfile(src_file, dst_file)
     new_transcript.append(f'{dst_file_rel}|{id}|[ES]{sort[i][1]}[ES]')
     new_transcript_coqui.append(f'{dst_file_rel}|{sort[i][1]}')
+
+#commonvoice
+amt = 1000 #how many values to extract from this, can be None if ratio is not None
+ratio = None #ratio of values to extract from this, can be None if amt is not None
+
+with open(prop_path('sources/commonvoiceWav/transcript.txt')) as f:
+    transcript = f.read()
+
+raw = transcript.split('\n')
+proc = [l.split('|') for l in raw if l!="" and not l.isspace()]
+for p in proc:
+    if p[2][-1] in [".", ",", "!", "?"]:
+        continue
+    else:
+        p[2] = p[2] + '.'
+sort = list(sorted(proc, key = lambda x: len(x[2])))
+
+if amt is None and ratio is None:
+    raise ValueError("One of amt or ratio must be not None")
+elif ratio is not None:
+    amt = int(len(sort) * ratio)
+else:
+    amt = int(amt)
+
+start = max(0, (len(sort)//2)-amt//2)
+end = min(len(sort), (len(sort)//2)+amt//2 + 1)
+
+for i in range(start, end):
+    src_file = prop_path(f'sources/commonvoiceWav/audios/{sort[i][0]}')
+    dst_file_rel = f'{audio_pth_rel}/{os.path.split(src_file)[-1]}'
+    dst_file = prop_path(dst_file_rel)
+    shutil.copyfile(src_file, dst_file)
+    new_transcript.append(f'{dst_file_rel}|{500 + int(sort[i][1])}|[ES]{sort[i][2]}[ES]')
+    new_transcript_coqui.append(f'{dst_file_rel}|{sort[i][2]}')
 
 #transcript
 with open(f'{trnsc_pth}/transcript.txt', 'w') as f:

@@ -6,6 +6,12 @@ sources/120h/*
 !sources/css10
 sources/css10/*
 !sources/css10/download.sh
+!sources/commonvoice
+sources/commonvoice/*
+!sources/commonvoice/download.sh
+!sources/commonvoiceWav
+sources/commonvoiceWav/*
+!sources/commonvoiceWav/download.sh
 combine.zip
 spanish_voices*
 spanish_voices.zip
