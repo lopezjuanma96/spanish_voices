@@ -1,5 +1,5 @@
 import os
-import shutil
+from pydub import AudioSegment
 from zipfile import ZipFile
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -31,7 +31,7 @@ amt = 300 #how many values to extract from this, can be None if ratio is not Non
 ratio = None #ratio of values to extract from this, can be None if amt is not None
 id = 101
 
-with open(prop_path('sources/css10/transcript.txt')) as f:
+with open(prop_path('sources/css10/transcript.txt'), encoding="utf-8") as f:
     transcript = f.read()
 
 raw = transcript.split('\n')
@@ -52,16 +52,22 @@ for i in range(start, end):
     src_file = prop_path(f'sources/css10/{sort[i][0]}')
     dst_file_rel = f'{audio_pth_rel}/{os.path.split(src_file)[-1]}'
     dst_file = prop_path(dst_file_rel)
-    shutil.copyfile(src_file, dst_file)
+    AudioSegment.from_file(
+        src_file, format="wav"
+    ).set_frame_rate(
+        22050
+    ).export(
+        dst_file, format="wav"
+    )
     new_transcript.append(f'{dst_file_rel}|{id}|[ES]{sort[i][1]}[ES]')
     new_transcript_coqui.append(f'{dst_file_rel}|{sort[i][1]}')
 
 #120h
-amt = 700 #how many values to extract from this, can be None if ratio is not None
+amt = 300 #how many values to extract from this, can be None if ratio is not None
 ratio = None #ratio of values to extract from this, can be None if amt is not None
 id = 104 #although this dataset has many voices, they are not tagged so they will be treated all as one speaker, maybe later this can be improved
 
-with open(prop_path('sources/120h/files.csv')) as f:
+with open(prop_path('sources/120h/files.csv'), encoding="utf-8") as f:
     transcript = f.read()
 
 raw = transcript.split('\n')
@@ -87,15 +93,21 @@ for i in range(start, end):
     src_file = prop_path(f'sources/120h/{sort[i][0]}')
     dst_file_rel = f'{audio_pth_rel}/{os.path.split(src_file)[-1]}'
     dst_file = prop_path(dst_file_rel)
-    shutil.copyfile(src_file, dst_file)
+    AudioSegment.from_file(
+        src_file, format="wav"
+    ).set_frame_rate(
+        22050
+    ).export(
+        dst_file, format="wav"
+    )
     new_transcript.append(f'{dst_file_rel}|{id}|[ES]{sort[i][1]}[ES]')
     new_transcript_coqui.append(f'{dst_file_rel}|{sort[i][1]}')
 
 #commonvoice
-amt = 1000 #how many values to extract from this, can be None if ratio is not None
+amt = 1400 #how many values to extract from this, can be None if ratio is not None
 ratio = None #ratio of values to extract from this, can be None if amt is not None
 
-with open(prop_path('sources/commonvoiceWav/transcript.txt')) as f:
+with open(prop_path('sources/commonvoiceWav/transcript.txt'), encoding="utf-8") as f:
     transcript = f.read()
 
 raw = transcript.split('\n')
@@ -121,14 +133,20 @@ for i in range(start, end):
     src_file = prop_path(f'sources/commonvoiceWav/audios/{sort[i][0]}')
     dst_file_rel = f'{audio_pth_rel}/{os.path.split(src_file)[-1]}'
     dst_file = prop_path(dst_file_rel)
-    shutil.copyfile(src_file, dst_file)
+    AudioSegment.from_file(
+        src_file, format="wav"
+    ).set_frame_rate(
+        22050
+    ).export(
+        dst_file, format="wav"
+    )
     new_transcript.append(f'{dst_file_rel}|{500 + int(sort[i][1])}|[ES]{sort[i][2]}[ES]')
     new_transcript_coqui.append(f'{dst_file_rel}|{sort[i][2]}')
 
 #transcript
-with open(f'{trnsc_pth}/transcript.txt', 'w') as f:
+with open(f'{trnsc_pth}/transcript.txt', 'w', encoding="utf-8") as f:
     f.write('\n'.join(new_transcript) + '\n') #transcript requires ending in a newline
-with open(f'{trnsc_pth}/transcript_coqui.txt', 'w') as f:
+with open(f'{trnsc_pth}/transcript_coqui.txt', 'w', encoding="utf-8") as f:
     f.write('\n'.join(new_transcript_coqui) + '\n') #transcript requires ending in a newline
 
 with ZipFile(prop_path('spanish_voices.zip'), 'w') as myzip:

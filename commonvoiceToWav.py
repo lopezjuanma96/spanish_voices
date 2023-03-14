@@ -42,11 +42,13 @@ except FileExistsError:
 for p, i,  s in zip(paths, ids, sentences):
     AudioSegment.from_mp3(
         os.path.join(src_path, 'clips', p)
+    ).set_frame_rate(
+        22050
     ).export(
         os.path.join(dst_path, 'audios', p.replace('.mp3', '.wav')), format='wav'
     )
 
     transcript.append(f'{p.replace(".mp3", ".wav")}|{i}|{s}')
 
-with open(os.path.join(dst_path, 'transcript.txt'), 'w', encoding='utf-8') as f:
-    f.write('\n'.join(transcript))
+    with open(os.path.join(dst_path, 'transcript.txt'), 'w', encoding='utf-8') as f:
+        f.write('\n'.join(transcript))
