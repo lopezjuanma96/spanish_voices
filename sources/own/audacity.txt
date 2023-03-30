@@ -1,0 +1,2 @@
+https://jaimeleal.github.io/how-to-speech-synthesis#step-2-split-recordings-into-audio-clips
+Sound Finder does not exist anymore, has been replaced by Label Sounds https://manual.audacityteam.org/man/label_sounds.html

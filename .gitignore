@@ -12,6 +12,9 @@ sources/commonvoice/*
 !sources/commonvoiceWav
 sources/commonvoiceWav/*
 !sources/commonvoiceWav/download.sh
+!sources/own
+sources/own/data
+sources/own/results
 combine.zip
 spanish_voices*
 spanish_voices.zip
